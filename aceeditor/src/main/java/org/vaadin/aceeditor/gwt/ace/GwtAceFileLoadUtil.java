@@ -55,19 +55,27 @@ public class GwtAceFileLoadUtil {
 	}-*/;
 
 	public static final JavaScriptObject getObject(AceMode mode) {
-		return getObject(mode.toString());
+		return getModeObject(mode.toString());
 	}
 
 	public static final boolean isAvailable(AceMode mode) {
 		return isModeAvailable(mode.toString());
 	}
 
-	private static native JavaScriptObject getObject(String mode) /*-{
+	private static native JavaScriptObject getModeObject(String mode) /*-{
 		var modePackage = $wnd.require("ace/mode/"+mode);
 		if (!modePackage) {
 			return null;
 		}
 		return new modePackage.Mode();
+	}-*/;
+	
+	private static native JavaScriptObject getThemeObject(String theme) /*-{
+		var themePackage = $wnd.require("ace/theme/"+theme);
+		if (!themePackage) {
+			return null;
+		}
+		return new themePackage.Theme();
 	}-*/;
 
 	private static native boolean isModeAvailable(String mode) /*-{

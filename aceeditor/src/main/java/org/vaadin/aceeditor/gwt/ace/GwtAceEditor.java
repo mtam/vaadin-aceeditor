@@ -52,7 +52,6 @@ public class GwtAceEditor extends JavaScriptObject {
 					}
 				});
 			}
-			
 		}
 	}
 	
@@ -65,44 +64,29 @@ public class GwtAceEditor extends JavaScriptObject {
 		});
 	}
 
-//	public final void setMode(final AceMode mode, final String URL) {
-//		if (GwtAceFileLoadUtil.isAvailable(mode)) {
-//			setMode(mode);
-//		} else {
-//			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
-////				@Override
-//				public void loadComplete() {
-//					setMode(mode);
-//				}
-//			});
-//		}
-//	}
-
 	private final native void setMode(JavaScriptObject mode) /*-{
 		this.getSession().setMode(mode);
 	}-*/;
 
-	public final void setTheme(AceTheme theme) {
+	
+	public final void setTheme(final AceTheme theme) {
 		if (GwtAceFileLoadUtil.isAvailable(theme)) {
 			setTheme(GwtAceFileLoadUtil.getThemeString(theme));
-		} else {
-			// There is no such theme loaded!
+		}
+		else {
+			loadAndSetTheme(theme);
 		}
 	}
-
-//	public final void setTheme(final AceTheme theme, final String URL) {
-//		if (GwtAceFileLoadUtil.isAvailable(theme)) {
-//			setTheme(theme);
-//		} else {
-//			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
-////				@Override
-//				public void loadComplete() {
-//					setTheme(theme);
-//				}
-//			});
-//		}
-//	}
-
+	
+	private void loadAndSetTheme(final AceTheme theme) {
+		DataResource themeRes = GwtAceFileLoadUtil.getResourceFor(theme);
+		GwtAceFileLoadUtil.loadScript(themeRes.getUrl(), new LoadListener() {
+			public void loadComplete() {
+				setTheme(GwtAceFileLoadUtil.getThemeString(theme));
+			}
+		});
+	}
+	
 	private final native void setTheme(String theme) /*-{
 		this.setTheme(theme);
 	}-*/;
