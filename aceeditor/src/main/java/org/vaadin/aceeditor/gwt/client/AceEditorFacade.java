@@ -65,14 +65,12 @@ public class AceEditorFacade implements EditorFacade, GwtAceChangeHandler,
 	public void settingsFromUIDL(UIDL uidl) {
 		if (uidl.hasAttribute("ace-mode")) {
 			AceMode mode = AceMode.valueOf(uidl.getStringAttribute("ace-mode"));
-			String url = uidl.getStringAttribute("ace-mode-url");
-			setMode(mode, url);
+			setMode(mode);
 		}
 		if (uidl.hasAttribute("ace-theme")) {
 			AceTheme theme = AceTheme.valueOf(uidl
 					.getStringAttribute("ace-theme"));
-			String url = uidl.getStringAttribute("ace-theme-url");
-			setTheme(theme, url);
+			setTheme(theme);
 		}
 		if (uidl.hasAttribute("ace-font-size")) {
 			String size = uidl.getStringAttribute("ace-font-size");
@@ -84,27 +82,19 @@ public class AceEditorFacade implements EditorFacade, GwtAceChangeHandler,
 		}
 	}
 
-	private void setMode(AceMode mode, String url) {
+	private void setMode(AceMode mode) {
 		if (this.mode == mode) {
 			return;
 		}
-		if (url != null) {
-			editor.setMode(mode, url);
-		} else {
-			editor.setMode(mode);
-		}
+		editor.setMode(mode);
 		this.mode = mode;
 	}
 
-	private void setTheme(AceTheme theme, String url) {
+	private void setTheme(AceTheme theme) {
 		if (this.theme == theme) {
 			return;
 		}
-		if (url != null) {
-			editor.setTheme(theme, url);
-		} else {
-			editor.setTheme(theme);
-		}
+		editor.setTheme(theme);
 		this.theme = theme;
 	}
 

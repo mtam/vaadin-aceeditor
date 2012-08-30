@@ -24,8 +24,6 @@ public class AceEditor extends AbstractTextField {
 	private AceTheme theme = null;
 	private String fontSize = "12px";
 	private Boolean hScrollVisible = false;
-	private String modeFileURL;
-	private String themeFileURL;
 
 	/**
 	 * Initializes the editor with an empty string as content.
@@ -47,26 +45,10 @@ public class AceEditor extends AbstractTextField {
 	/**
 	 * Sets the Ace mode.
 	 * 
-	 * <p>
-	 * NOTE: The corresponding mode JavaScript file must be loaded. If it's not
-	 * already, use {@link #setMode(AceMode, String)} with the file URL.
-	 * </p>
-	 * 
 	 * @param mode
 	 */
 	public void setMode(AceMode mode) {
-		setMode(mode, null);
-	}
-
-	/**
-	 * Sets the Ace mode after loading it from the given URL (if necessary).
-	 * 
-	 * @param mode
-	 * @param modeFileURL
-	 */
-	public void setMode(AceMode mode, String modeFileURL) {
 		this.mode = mode;
-		this.modeFileURL = modeFileURL;
 		requestRepaint();
 	}
 
@@ -80,26 +62,10 @@ public class AceEditor extends AbstractTextField {
 	/**
 	 * Sets the Ace theme.
 	 * 
-	 * <p>
-	 * NOTE: The corresponding theme JavaScript file must be loaded. If it's not
-	 * already, use {@link #setTheme(AceTheme, String)} with the file URL.
-	 * </p>
-	 * 
 	 * @param theme
 	 */
 	public void setTheme(AceTheme theme) {
-		setTheme(theme, null);
-	}
-
-	/**
-	 * Sets the Ace theme after loading it from the given URL (if necessary).
-	 * 
-	 * @param theme
-	 * @param themeFileURL
-	 */
-	public void setTheme(AceTheme theme, String themeFileURL) {
 		this.theme = theme;
-		this.themeFileURL = themeFileURL;
 		requestRepaint();
 	}
 
@@ -141,14 +107,8 @@ public class AceEditor extends AbstractTextField {
 		if (mode != null) {
 			target.addAttribute("ace-mode", mode.toString());
 		}
-		if (modeFileURL != null) {
-			target.addAttribute("ace-mode-url", modeFileURL);
-		}
 		if (theme != null) {
 			target.addAttribute("ace-theme", theme.toString());
-		}
-		if (themeFileURL != null) {
-			target.addAttribute("ace-theme-url", themeFileURL);
 		}
 		if (fontSize != null) {
 			target.addAttribute("ace-font-size", fontSize);

@@ -7,6 +7,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.resources.client.DataResource;
 
 /**
  * A GWT adaptation of Ace editor.
@@ -35,26 +36,47 @@ public class GwtAceEditor extends JavaScriptObject {
 		return editor;
 	}-*/;
 
-	public final void setMode(AceMode mode) {
+	public final void setMode(final AceMode mode) {
 		if (GwtAceFileLoadUtil.isAvailable(mode)) {
 			setMode(GwtAceFileLoadUtil.getObject(mode));
-		} else {
-			// There is no such mode loaded!
 		}
+		else {
+			DataResource workerRes = GwtAceFileLoadUtil.getWorkerResourceFor(mode);
+			if (workerRes==null) {
+				loadAndSetMode(mode);
+			}
+			else {
+				GwtAceFileLoadUtil.loadScript(workerRes.getUrl(), new LoadListener() {
+					public void loadComplete() {
+						loadAndSetMode(mode);
+					}
+				});
+			}
+			
+		}
+	}
+	
+	private void loadAndSetMode(final AceMode mode) {
+		DataResource modeRes = GwtAceFileLoadUtil.getResourceFor(mode);
+		GwtAceFileLoadUtil.loadScript(modeRes.getUrl(), new LoadListener() {
+			public void loadComplete() {
+				setMode(GwtAceFileLoadUtil.getObject(mode));
+			}
+		});
 	}
 
-	public final void setMode(final AceMode mode, final String URL) {
-		if (GwtAceFileLoadUtil.isAvailable(mode)) {
-			setMode(mode);
-		} else {
-			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
-//				@Override
-				public void loadComplete() {
-					setMode(mode);
-				}
-			});
-		}
-	}
+//	public final void setMode(final AceMode mode, final String URL) {
+//		if (GwtAceFileLoadUtil.isAvailable(mode)) {
+//			setMode(mode);
+//		} else {
+//			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
+////				@Override
+//				public void loadComplete() {
+//					setMode(mode);
+//				}
+//			});
+//		}
+//	}
 
 	private final native void setMode(JavaScriptObject mode) /*-{
 		this.getSession().setMode(mode);
@@ -68,18 +90,18 @@ public class GwtAceEditor extends JavaScriptObject {
 		}
 	}
 
-	public final void setTheme(final AceTheme theme, final String URL) {
-		if (GwtAceFileLoadUtil.isAvailable(theme)) {
-			setTheme(theme);
-		} else {
-			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
-//				@Override
-				public void loadComplete() {
-					setTheme(theme);
-				}
-			});
-		}
-	}
+//	public final void setTheme(final AceTheme theme, final String URL) {
+//		if (GwtAceFileLoadUtil.isAvailable(theme)) {
+//			setTheme(theme);
+//		} else {
+//			GwtAceFileLoadUtil.loadScript(URL, new LoadListener() {
+////				@Override
+//				public void loadComplete() {
+//					setTheme(theme);
+//				}
+//			});
+//		}
+//	}
 
 	private final native void setTheme(String theme) /*-{
 		this.setTheme(theme);
