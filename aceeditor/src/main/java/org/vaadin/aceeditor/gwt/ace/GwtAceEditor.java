@@ -41,17 +41,7 @@ public class GwtAceEditor extends JavaScriptObject {
 			setMode(GwtAceFileLoadUtil.getObject(mode));
 		}
 		else {
-			DataResource workerRes = GwtAceFileLoadUtil.getWorkerResourceFor(mode);
-			if (workerRes==null) {
-				loadAndSetMode(mode);
-			}
-			else {
-				GwtAceFileLoadUtil.loadScript(workerRes.getUrl(), new LoadListener() {
-					public void loadComplete() {
-						loadAndSetMode(mode);
-					}
-				});
-			}
+			loadAndSetMode(mode);
 		}
 	}
 	

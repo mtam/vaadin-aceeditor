@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.resources.client.DataResource;
-import com.google.gwt.resources.client.ExternalTextResource;
-import com.google.gwt.resources.client.TextResource;
 
 /**
  * Helper for loading Ace {@link AceMode modes} and {@link AceTheme themes}.
@@ -183,12 +181,5 @@ public class GwtAceFileLoadUtil {
 			default: throw new IllegalArgumentException("No resource for theme: "+theme);
 		}
 	}
-
-	public static DataResource getWorkerResourceFor(AceMode mode) {
-//		AceModeResources res = AceModeResources.INSTANCE;
-//		if (mode==AceMode.javascript) return res.javascriptWorker();
-		return null;
-	}
-	
 
 }
