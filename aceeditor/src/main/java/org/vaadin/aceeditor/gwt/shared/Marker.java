@@ -12,7 +12,7 @@ package org.vaadin.aceeditor.gwt.shared;
 public class Marker implements Comparable<Marker> {
 
 	public enum Type {
-		ERROR, LOCK, ACE, COLLABACE, SUGGESTION, COMMENT
+		ERROR, ERROR_PERSONAL, LOCK, ACE, ACE_OTHERS, SUGGESTION, COMMENT
 	}
 
 	public interface Data {
@@ -20,8 +20,8 @@ public class Marker implements Comparable<Marker> {
 	}
 
 	private final Type type;
-	private int start;
-	private int end;
+	private final int start;
+	private final int end;
 	private final Data data;
 
 	public Marker(Type type, int start, int end) {
@@ -74,6 +74,10 @@ public class Marker implements Comparable<Marker> {
 	public static Marker newErrorMarker(int start, int end, String msg) {
 		return new Marker(Type.ERROR, start, end, new ErrorMarkerData(msg));
 	}
+	
+	public static Marker newPersonalErrorMarker(int start, int end, String msg, String userId) {
+		return new Marker(Type.ERROR_PERSONAL, start, end, new PersonalErrorMarkerData(userId, msg));
+	}
 
 	public static Marker newSearchMarker(int start, int end) {
 		return newAceMarker(start, end, "acemarker-1 SEARCH", "text", false);
@@ -122,12 +126,12 @@ public class Marker implements Comparable<Marker> {
 	}
 	
 	/**
-	 * Like newAceMarker but  
+	 * Like newAceMarker but the marker is only shown if userId not same as editors userId.
 	 *
 	 */
-	public static Marker newCollaboratorAceMarker(int start, int end, String cls,
+	public static Marker newAceOthersMarker(int start, int end, String cls,
 			String type, boolean inFront, String userId) {
-		return new Marker(Marker.Type.COLLABACE, start, end, new CollaboratorAceMarkerData(cls,
+		return new Marker(Marker.Type.ACE_OTHERS, start, end, new AceMarkerForOthersData(cls,
 				type, inFront, userId));
 	}
 
@@ -163,10 +167,12 @@ public class Marker implements Comparable<Marker> {
 		switch (type) {
 		case ERROR:
 			return new ErrorMarkerData(dataString);
+		case ERROR_PERSONAL:
+			return new PersonalErrorMarkerData(dataString);
 		case ACE:
 			return new AceMarkerData(dataString);
-		case COLLABACE:
-			return new CollaboratorAceMarkerData(dataString);
+		case ACE_OTHERS:
+			return new AceMarkerForOthersData(dataString);
 		case LOCK:
 			return new LockMarkerData(dataString);
 		case COMMENT:

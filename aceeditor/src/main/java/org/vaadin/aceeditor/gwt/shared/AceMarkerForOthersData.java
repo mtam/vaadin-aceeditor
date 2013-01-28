@@ -1,20 +1,26 @@
 package org.vaadin.aceeditor.gwt.shared;
 
-public class CollaboratorAceMarkerData implements Marker.Data {
+/**
+ * 
+ * A marker that is shown for all the others except the user.
+ * I.e. shown if this.userId equals editors userId.
+ *
+ */
+public class AceMarkerForOthersData implements Marker.Data {
 
 	private final String cls;
 	private final String type;
 	private final boolean inFront;
 	private final String userId;
 
-	public CollaboratorAceMarkerData(String cls, String type, boolean inFront, String userId) {
+	public AceMarkerForOthersData(String cls, String type, boolean inFront, String userId) {
 		this.cls = cls;
 		this.type = type;
 		this.inFront = inFront;
 		this.userId = userId;
 	}
 
-	public CollaboratorAceMarkerData(String dataString) {
+	public AceMarkerForOthersData(String dataString) {
 		String[] items = dataString.split(":", 4);
 		this.cls = items[0];
 		this.type = items[1];

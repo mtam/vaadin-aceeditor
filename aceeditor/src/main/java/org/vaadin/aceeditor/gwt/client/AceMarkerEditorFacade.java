@@ -13,11 +13,12 @@ import org.vaadin.aceeditor.gwt.ace.GwtAceEditor;
 import org.vaadin.aceeditor.gwt.ace.GwtAceRange;
 import org.vaadin.aceeditor.gwt.ace.GwtAceSelection;
 import org.vaadin.aceeditor.gwt.shared.AceMarkerData;
-import org.vaadin.aceeditor.gwt.shared.CollaboratorAceMarkerData;
+import org.vaadin.aceeditor.gwt.shared.AceMarkerForOthersData;
 import org.vaadin.aceeditor.gwt.shared.CommentMarkerData;
 import org.vaadin.aceeditor.gwt.shared.ErrorMarkerData;
 import org.vaadin.aceeditor.gwt.shared.LockMarkerData;
 import org.vaadin.aceeditor.gwt.shared.Marker;
+import org.vaadin.aceeditor.gwt.shared.PersonalErrorMarkerData;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -40,7 +41,6 @@ public class AceMarkerEditorFacade extends AceEditorFacade implements
 
 		AceMarker(Marker marker, String cls, String type, boolean inFront,
 				boolean visible) {
-//			VConsole.log("NEW AceMarker " + marker.toString());
 			this.marker = marker;
 			this.start = marker.getStart();
 			this.end = marker.getEnd();
@@ -211,10 +211,20 @@ public class AceMarkerEditorFacade extends AceEditorFacade implements
 			return new AceMarker(m, amd.getCls(), amd.getType(),
 					amd.isInFront(), true);
 		}
-		else if (m.getType() == Marker.Type.COLLABACE) {
-			CollaboratorAceMarkerData camd = (CollaboratorAceMarkerData)m.getData();
+		else if (m.getType() == Marker.Type.ACE_OTHERS) {
+			AceMarkerForOthersData camd = (AceMarkerForOthersData)m.getData();
 			return new AceMarker(m, camd.getCls(), camd.getType(), camd.isInFront(),
 					!camd.getUserId().equals(userId));
+		}
+		else if (m.getType() == Marker.Type.ERROR_PERSONAL) {
+			PersonalErrorMarkerData pemd = (PersonalErrorMarkerData)m.getData();
+			if (pemd.getUserId().equals(userId)) {
+				return new AceMarker(m, "acemarker-1 ERROR_PERSONAL", markerTypeOf(m), false, true);
+			}
+			else {
+				return new AceMarker(m, "acemarker-1 ERROR_OTHERS", "text", false, true);
+			}
+			
 		}
 		else {
 			return new AceMarker(m, markerClassOf(m), markerTypeOf(m), false,
@@ -229,7 +239,18 @@ public class AceMarkerEditorFacade extends AceEditorFacade implements
 				return null;
 			}
 			return GwtAceAnnotation.create("error", emd.getErrorMessage(), 0);
-		} else if (m.getType() == Marker.Type.LOCK) {
+		}
+		else if (m.getType() == Marker.Type.ERROR_PERSONAL) {
+			PersonalErrorMarkerData pemd = (PersonalErrorMarkerData)m.getData();
+			if (pemd.getUserId().equals(userId)) {
+				return GwtAceAnnotation.create("error", pemd.getErrorMessage(), 0);
+			}
+			else {
+				return GwtAceAnnotation.create("warning", pemd.getErrorMessage(), 0);
+			}
+		}	
+		else if (m.getType() == Marker.Type.LOCK) {
+		
 			LockMarkerData lmd = (LockMarkerData) m.getData();
 			if (lmd == null || lmd.getMessage() == null) {
 				return null;

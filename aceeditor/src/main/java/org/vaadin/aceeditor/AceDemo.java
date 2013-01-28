@@ -51,8 +51,8 @@ public class AceDemo extends Application {
 			int i = 0;
 			while (true) {
 				if (mr.find(i)) {
-					errors.add(Marker.newErrorMarker(mr.start(), mr.end(), "'"
-							+ mr.group() + "' is a banned word!"));
+					errors.add(Marker.newPersonalErrorMarker(mr.start(), mr.end(), "'"
+							+ mr.group() + "' is a banned word!", "janari"));
 					i = mr.end();
 				} else {
 					break;
@@ -96,7 +96,7 @@ public class AceDemo extends Application {
 		layout.setSizeFull();
 		mainLayout.addComponent(layout);
 		mainLayout.setExpandRatio(layout, 1);
-
+		
 		ace.setSizeFull();
 
 		ace.setValue("var x;\nvar y = 'LOL!';\n//This is a long line, a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long line to be wrapped!\n");

@@ -11,8 +11,7 @@ public class ErrorMarkerData implements Marker.Data {
 	public String getErrorMessage() {
 		return msg;
 	}
-
-//	@Override
+	
 	public String getDataString() {
 		return msg;
 	}
